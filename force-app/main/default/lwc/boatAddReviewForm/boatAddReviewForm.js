@@ -15,7 +15,7 @@ const SUCCESS_VARIANT = 'success';
 export default class BoatAddReviewForm extends LightningElement {
     // Private
     boatId;
-    rating;
+    rating = 1;
     boatReviewObject = BOAT_REVIEW_OBJECT;
     nameField = NAME_FIELD;
     commentField = COMMENT_FIELD;
