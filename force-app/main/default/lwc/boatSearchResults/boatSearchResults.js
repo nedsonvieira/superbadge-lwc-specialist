@@ -39,7 +39,7 @@ export default class BoatSearchResults extends LightningElement {
     @wire(getBoats, { boatTypeId: '$boatTypeId' })
     wiredBoats(result) {
         if (result.data) {
-            this.boats = result;
+            this.boats = result.data;
         } else if (result.error) {
             const errorEvt = new ShowToastEvent(
                 {
