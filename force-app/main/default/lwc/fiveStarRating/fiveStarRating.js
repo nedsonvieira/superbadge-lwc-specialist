@@ -13,18 +13,14 @@ const READ_ONLY_CLASS = 'readonly c-rating';
 export default class FiveStarRating extends LightningElement {
   //initialize public readOnly and value properties
   @api readOnly;
-  @api value;
+  @api value = 1;
 
-  editedValue;
+  editedValue = 1;
   isRendered;
 
   //getter function that returns the correct class depending on if it is readonly
-  starClass() {
-    if (this.readOnly) {
-      return READ_ONLY_CLASS;
-    } else {
-      return EDITABLE_CLASS;
-    }
+  get starClass() {
+    return this.readOnly ? READ_ONLY_CLASS : EDITABLE_CLASS;
   }
 
   // Render callback to load the script once the component renders.

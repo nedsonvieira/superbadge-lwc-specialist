@@ -8,7 +8,6 @@ import { refreshApex } from '@salesforce/apex';
 import getBoats from '@salesforce/apex/BoatDataService.getBoats';
 import updateBoatList from '@salesforce/apex/BoatDataService.updateBoatList';
 import BOATMC from '@salesforce/messageChannel/BoatMessageChannel__c';
-import { updateRecord } from 'lightning/uiRecordApi';
 
 const SUCCESS_TITLE = 'Success';
 const MESSAGE_SHIP_IT = 'Ship it!';
@@ -76,7 +75,7 @@ export default class BoatSearchResults extends LightningElement {
     }
 
     // this function must update selectedBoatId and call sendMessageService
-    pdateSelectedTile(event) {
+    updateSelectedTile(event) {
         this.selectedBoatId = event.detail.boatId;
         this.sendMessageService(this.selectedBoatId)
     }
@@ -94,40 +93,33 @@ export default class BoatSearchResults extends LightningElement {
     // clear lightning-datatable draft values
     handleSave(event) {
         // notify loading
-        this.notifyLoading(true);
+        this.isLoading = true;
+        this.notifyLoading(this.isLoading);
 
-        const updatedFields = event.detail.draftValues.slice().map(draft => {
-            const fields = Object.assign({}, draft);
-            return { fields };
-        });
-
+        const updatedFields = event.detail.draftValues;
         // Update the records via Apex
-        const recordInputs = updatedFields.map(record => updateRecord(record));
-        Promise.all(recordInputs)
+        updateBoatList({ data: updatedFields })
             .then(result => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: SUCCESS_TITLE,
-                        message: MESSAGE_SHIP_IT,
-                        variant: SUCCESS_VARIANT
-                    })
-                );
+                const toast = new ShowToastEvent({
+                    title: SUCCESS_TITLE,
+                    message: MESSAGE_SHIP_IT,
+                    variant: SUCCESS_VARIANT,
+                });
+                this.dispatchEvent(toast);
                 this.draftValues = [];
                 return this.refresh();
             })
             .catch(error => {
-                this.error = error;
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: ERROR_TITLE,
-                        message: CONST_ERROR,
-                        variant: ERROR_VARIANT
-                    })
-                );
-                this.notifyLoading(false);
+                const toast = new ShowToastEvent({
+                    title: ERROR_TITLE,
+                    message: error.message,
+                    variant: ERROR_VARIANT,
+                });
+                this.dispatchEvent(toast);
             })
             .finally(() => {
-                this.draftValues = [];
+                this.isLoading = false;
+                this.notifyLoading(this.isLoading);
             });
     }
 
@@ -136,7 +128,7 @@ export default class BoatSearchResults extends LightningElement {
         if (isLoading) {
             this.dispatchEvent(new CustomEvent('loading'));
         } else {
-            this.dispatchEvent(CustomEvent('doneloading'));
+            this.dispatchEvent(new CustomEvent('doneloading'));
         }
     }
 }
