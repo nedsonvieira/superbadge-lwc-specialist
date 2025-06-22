@@ -1,108 +1,147 @@
-🚤 Superbadge Lightning Web Components Specialist – Friend Ships (HowWeRoll Rentals)
-Este repositório contém a implementação da Superbadge Lightning Web Components Specialist do Trailhead, simulando o projeto Friend Ships para a HowWeRoll Rentals — a expansão para boat sharing usando ⚡ Lightning Web Components e 🧠 Apex.
+# 🚤 Superbadge Lightning Web Components Specialist – Friend Ships (HowWeRoll Rentals)
 
-🔗 Superbadge no Trailhead: Superbadge LWC Specialist
-🔗 Repositório GitHub: github.com/nedsonvieira/superbadge-lwc-specialist
+Este repositório contém a implementação da **Superbadge Lightning Web Components Specialist** do Trailhead, simulando o projeto **Friend Ships** para a HowWeRoll Rentals — a expansão para boat sharing usando ⚡ _Lightning Web Components_ e 🧠 _Apex_.
 
-🎯 Descrição Geral
-A aplicação simula o módulo Friend Ships, que expande a HowWeRoll Rentals para o compartilhamento de barcos. O objetivo principal:
+🔗 Superbadge no Trailhead: [Superbadge LWC Specialist](https://trailhead.salesforce.com/pt-BR/content/learn/superbadges/superbadge_lwc_specialist)  
+🔗 Repositório GitHub: [github.com/nedsonvieira/superbadge-lwc-specialist](https://github.com/nedsonvieira/superbadge-lwc-specialist)
 
-⚓️ Visualização e edição de barcos
-🗺️ Localização via mapa e geolocalização
-✍️ Avaliações com sistema de estrelas
-🧩 Boas práticas com LWC: componentização, pub/sub, navegação, feedback visual
+---
+
+## 🎯 Descrição Geral
+
+A aplicação simula o módulo **Friend Ships**, que expande a HowWeRoll Rentals para o compartilhamento de barcos. O objetivo principal:
+
+⚓️ Visualização e edição de barcos  
+🗺️ Localização via mapa e geolocalização  
+✍️ Avaliações com sistema de estrelas  
+🧩 Boas práticas com LWC: componentização, pub/sub, navegação, feedback visual  
 🚀 Integração com Apex para dados e lógica de negócio
 
-⚙️ Componentes Lightning Web Components
+---
+
+## ⚙️ Componentes Lightning Web Components
+
 🧱 Abaixo, um resumo dos principais componentes:
 
-🔍 boatSearch
-Container principal da busca de barcos
+### 🔍 `boatSearch`
 
-Combina boatSearchForm + boatSearchResults
+- Container principal da busca de barcos
+    
+- Combina `boatSearchForm` + `boatSearchResults`
+    
+- Exibe spinner (`<lightning-spinner>`) e botão “New Boat”
+    
 
-Exibe spinner (<lightning-spinner>) e botão “New Boat”
+### 📋 `boatSearchForm`
 
-📋 boatSearchForm
-Combobox para filtro por tipo de barco (via Apex)
+- Combobox para filtro por tipo de barco (via Apex)
+    
+- Dispara evento `search` com `boatTypeId`
+    
 
-Dispara evento search com boatTypeId
+### 📦 `boatSearchResults`
 
-📦 boatSearchResults
-Tabs: 🖼️ Gallery, ✏️ Boat Editor, 📍 Boats Near Me
+- Tabs: 🖼️ Gallery, ✏️ Boat Editor, 📍 Boats Near Me
+    
+- Usa Lightning Message Service para comunicação
+    
+- Toasts para feedback de sucesso/erro
+    
 
-Usa Lightning Message Service para comunicação
+### 🧩 `boatTile`
 
-Toasts para feedback de sucesso/erro
+- Card visual com informações básicas do barco
+    
+- Alterna visual com CSS ao ser selecionado
+    
+- Dispara evento `boatselect`
+    
 
-🧩 boatTile
-Card visual com informações básicas do barco
+### 📍 `boatsNearMe`
 
-Alterna visual com CSS ao ser selecionado
+- Usa `navigator.geolocation` para localizar o usuário
+    
+- Chama Apex para buscar barcos próximos
+    
+- Mostra `<lightning-map>` com marcador “You Are Here”
+    
 
-Dispara evento boatselect
+### 🗺️ `boatMap`
 
-📍 boatsNearMe
-Usa navigator.geolocation para localizar o usuário
+- Recebe `boatId` via Message Channel
+    
+- Mostra a posição do barco em um mapa
+    
+- Usa `getRecord` + spinner durante carregamento
+    
 
-Chama Apex para buscar barcos próximos
+### ⭐ `fiveStarRating`
 
-Mostra <lightning-map> com marcador “You Are Here”
+- Avaliação interativa com 5 estrelas
+    
+- Editável ou somente leitura
+    
+- Usa `loadScript` e `loadStyle` com recurso externo
+    
 
-🗺️ boatMap
-Recebe boatId via Message Channel
+### 🧾 `boatDetailTabs`
 
-Mostra a posição do barco em um mapa
+- Tabs: 📄 Details, 📝 Reviews, ➕ Add Review
+    
+- Usa NavigationMixin para links e botões
+    
+- Chama `refresh()` após criação de review
+    
 
-Usa getRecord + spinner durante carregamento
+### 🧑‍⚖️ `boatAddReviewForm`
 
-⭐ fiveStarRating
-Avaliação interativa com 5 estrelas
+- Formulário editável com Subject, Comment e Rating
+    
+- Dispara evento `createreview` ao salvar
+    
+- Toasts de sucesso e limpa formulário
+    
 
-Editável ou somente leitura
+### 🧠 `boatReviews`
 
-Usa loadScript e loadStyle com recurso externo
+- Lista de reviews com avatar, autor, data e comentário
+    
+- Usa Apex imperativo e SLDS Feed Layout
+    
+- Mensagem amigável se não houver avaliações
+    
 
-🧾 boatDetailTabs
-Tabs: 📄 Details, 📝 Reviews, ➕ Add Review
+### 🤝 `similarBoats`
 
-Usa NavigationMixin para links e botões
+- Exibe barcos similares (por tipo, preço ou tamanho)
+    
+- Configurável via Lightning App Builder
+    
+- Usa `boatTile` para mostrar resultados
+    
 
-Chama refresh() após criação de review
+---
 
-🧑‍⚖️ boatAddReviewForm
-Formulário editável com Subject, Comment e Rating
+## ✅ Requisitos
 
-Dispara evento createreview ao salvar
+- 🛠️ Salesforce CLI
+    
+- ☁️ Org de desenvolvimento Salesforce
+    
+- 🧑‍💻 VS Code com Salesforce Extensions
+    
 
-Toasts de sucesso e limpa formulário
+---
 
-🧠 boatReviews
-Lista de reviews com avatar, autor, data e comentário
+## 📚 Recursos
 
-Usa Apex imperativo e SLDS Feed Layout
+📘 [Documentação LWC](https://developer.salesforce.com/docs/component-library/documentation/en/lwc)  
+🎓 [Trailhead: Superbadge LWC Specialist](https://trailhead.salesforce.com/pt-BR/content/learn/superbadges/superbadge_lwc_specialist)
 
-Mensagem amigável se não houver avaliações
+---
 
-🤝 similarBoats
-Exibe barcos similares (por tipo, preço ou tamanho)
+## 👨‍💻 Autor
 
-Configurável via Lightning App Builder
-
-Usa boatTile para mostrar resultados
-
-✅ Requisitos
-🛠️ Salesforce CLI
-
-☁️ Org de desenvolvimento Salesforce
-
-🧑‍💻 VS Code com Salesforce Extensions
-
-📚 Recursos
-📘 Documentação LWC
-🎓 Trailhead: Superbadge LWC Specialist
-
-👨‍💻 Autor
-Nedson Vieira
-🔗 LinkedIn
-🌟 Trailhead Profile
+**Nedson Vieira**  
+🔗 [LinkedIn](https://www.linkedin.com/in/nedsonvieira)  
+🌟 [Trailhead Profile](https://www.salesforce.com/trailblazer/qnc912aeuektcnhbvp)
