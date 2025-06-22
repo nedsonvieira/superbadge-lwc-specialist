@@ -140,6 +140,14 @@ A aplicação simula o módulo **Friend Ships**, que expande a HowWeRoll Rentals
 
 ---
 
+## 🖼️ Galeria de Componentes
+
+Confira as imagens dos Lightning Web Components desenvolvidos neste projeto:
+
+📂 [Imagens dos LWCs](https://github.com/nedsonvieira/superbadge-lwc-specialist/tree/main/img-lwc)
+
+---
+
 ## 👨‍💻 Autor
 
 **Nedson Vieira**  
